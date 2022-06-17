@@ -17,6 +17,25 @@
 	</properties>
 
 	<dependencies>
+		<!-- Spring Context -->
+		<dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-context</artifactId>
+    	<version>${org.springframework-version}</version>
+    	<exclusions>
+					<exclusion>
+	    				<groupId>commons-logging</groupId>
+	   					<artifactId>commons-logging</artifactId>
+					</exclusion>
+    	</exclusions>	
+		</dependency>
+		
+		<!-- Spring MVC -->
+		<dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-webmvc</artifactId>
+    	<version>${org.springframework-version}</version>
+		</dependency>
 
 		<!-- JSTL -->
 		<dependency>
@@ -24,6 +43,7 @@
     	<artifactId>jstl</artifactId>
     	<version>1.2</version>
 		</dependency>
+		
 
 	</dependencies>
 
