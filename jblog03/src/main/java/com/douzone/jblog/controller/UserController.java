@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.douzone.jblog.service.FileUploadService;
 import com.douzone.jblog.service.UserService;
 import com.douzone.jblog.vo.UserVo;
 
@@ -14,6 +15,9 @@ import com.douzone.jblog.vo.UserVo;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private FileUploadService fileUploadService;
 	
 	@RequestMapping("/login")
 	public String login() {
@@ -35,7 +39,11 @@ public class UserController {
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String join(@ModelAttribute("userVo") UserVo userVo) {
-		userService.join(userVo);
+		if(userService.checkUser(userVo) != 0)
+			return "redirect:/user/join";
+		
+		String defaultLogo = fileUploadService.defaultUrl();
+		userService.addUser(userVo, defaultLogo);
 		
 		return "redirect:/user/joinsuccess";
 	}

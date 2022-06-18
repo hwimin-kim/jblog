@@ -1,5 +1,8 @@
 package com.douzone.jblog.vo;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class BlogVo {
 	private String id;
 	private String title;
