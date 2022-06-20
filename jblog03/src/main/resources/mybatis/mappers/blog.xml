@@ -9,4 +9,11 @@
 				values(#{id }, #{title}, '/assets/gallery/default.jpg')
 				]]>
 		</insert>
+		<select id="select" parameterType="String" resultType="blogvo">
+				<![CDATA[
+				select title, logo
+					from blog
+				where id = #{id}
+				]]>
+		</select>
 </mapper>

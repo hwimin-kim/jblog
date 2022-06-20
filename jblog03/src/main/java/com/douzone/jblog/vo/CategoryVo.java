@@ -33,14 +33,15 @@ public class CategoryVo {
 		this.description = description;
 	}
 	
+	
 	public String getBlogId() {
 		return blogId;
 	}
-	
+
 	public void setBlogId(String blogId) {
 		this.blogId = blogId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", blogId=" + blogId + "]";

@@ -1,5 +1,7 @@
 package com.douzone.jblog.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,10 @@ public class CategoryRepository {
 		vo.setBlogId(blogVoId);
 		
 		return sqlSession.insert("category.insert", vo);
+	}
+
+	public List<CategoryVo> findAllbyId(String blogId) {
+		return sqlSession.selectList("category.select", blogId);
 	}
 
 }

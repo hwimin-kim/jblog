@@ -21,4 +21,8 @@ public class BlogRepository {
 		return sqlSession.insert("blog.insert", vo);
 	}
 
+	public BlogVo findAllById(String blogId) {
+		return sqlSession.selectOne("blog.select", blogId);
+	}
+
 }
