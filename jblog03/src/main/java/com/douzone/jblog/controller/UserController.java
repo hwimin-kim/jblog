@@ -19,7 +19,10 @@ public class UserController {
 		
 	@RequestMapping("/login")
 	public String login(@AuthUser UserVo authUser, Model model) {
-		System.out.println(authUser);
+		// 이미 로그인한 경우
+		if(authUser != null)
+			return "redirect:/";
+					
 		model.addAttribute("authUser", authUser);
 		return "user/login";
 	}
@@ -33,14 +36,21 @@ public class UserController {
 	}	
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String join() {
+	public String join(@AuthUser UserVo authUser) {
+		// 이미 로그인한 경우
+		if(authUser != null)
+			return "redirect:/";
+		
 		return "user/join";
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(@ModelAttribute("userVo") UserVo userVo) {
-		if(userService.checkUser(userVo) != 0)
-			return "redirect:/user/join";
+	public String join(@ModelAttribute("userVo") UserVo userVo, Model model) {
+		// 이미 등록된 회원(id)인 경우
+		if(userService.checkUser(userVo) != 0) {
+			model.addAttribute("userVo", userVo);
+			return "user/join";
+		}
 		
 		userService.addUser(userVo);
 		
@@ -48,7 +58,8 @@ public class UserController {
 	}
 		
 	@RequestMapping("/joinsuccess")
-	public String joinsuccess() {
+	public String joinsuccess(@AuthUser UserVo authUser, Model model) {
+		model.addAttribute("authUser", authUser);
 		return "user/joinsuccess";
 	}
 }
