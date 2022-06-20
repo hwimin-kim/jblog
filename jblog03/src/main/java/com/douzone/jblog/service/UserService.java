@@ -4,33 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douzone.jblog.repository.BlogRepository;
+import com.douzone.jblog.repository.CategoryRepository;
 import com.douzone.jblog.repository.UserRepository;
 import com.douzone.jblog.vo.BlogVo;
+import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.UserVo;
 
 @Service
 public class UserService {	
-	@Autowired
-	private BlogVo blogVo;
-	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
 	private BlogRepository blogRepository;
 	
-	public void addUser(UserVo userVo, String defaultLogo) {
-		userRepository.insert(userVo);
-		
-		blogVo.setId(userVo.getId());
-		blogVo.setTitle(userVo.getId() + "의 블로그 입니다.");
-		blogVo.setLogo(defaultLogo);
-			
-		blogRepository.insert(blogVo);
-		
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	public boolean addUser(UserVo userVo) {
+		if(userRepository.insert(userVo) == 1) 		
+			if(blogRepository.insert(userVo.getId()) == 1) 
+				return categoryRepository.insert(userVo.getId()) == 1;
+							
+		return false;
 	}
 
-	public int checkUser(UserVo userVo) {
+	public int getUser(UserVo userVo) {
 		return userRepository.findCountById(userVo.getId());
 	}
 

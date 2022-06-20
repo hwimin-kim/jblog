@@ -11,10 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
-	
 	private static String RESTORE_PATH = "/mysite-uploads";
 	private static String URL_BASE = "/assets/gallery";
-	private static String DEFAULT_LOGO = "default.jpg";
 
 	public String restore(MultipartFile multipartFile) {
 		
@@ -23,7 +21,9 @@ public class FileUploadService {
 			if(multipartFile.isEmpty())
 				return url;
 			
-			generateDirectory();
+			File restoreDirectory = new File(RESTORE_PATH);
+			if(!restoreDirectory.exists())
+				restoreDirectory.mkdirs();
 			
 			String originFileName = multipartFile.getOriginalFilename();
 			String extName = originFileName.substring(originFileName.lastIndexOf('.')+1);
@@ -65,16 +65,4 @@ public class FileUploadService {
 		
 		return filename;
 	}
-	
-	private void generateDirectory() {
-		File restoreDirectory = new File(RESTORE_PATH);
-		if(!restoreDirectory.exists())
-			restoreDirectory.mkdirs();
-	}
-	
-	public String defaultUrl() {
-		generateDirectory();
-		return URL_BASE + "/" + DEFAULT_LOGO;
-	}
-
 }

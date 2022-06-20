@@ -5,12 +5,14 @@ desc blog;
 desc category;
 desc post;
 
--- user table
+-- select user
 select * from user;
+-- select blog 
+select * from blog;
+
 
 -- select user
 select count(id) from user where id = 'test01';
-select * from blog;
 
 
 

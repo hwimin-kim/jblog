@@ -15,10 +15,7 @@ import com.douzone.jblog.vo.UserVo;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private FileUploadService fileUploadService;
-	
+		
 	@RequestMapping("/login")
 	public String login() {
 		return "user/login";
@@ -39,11 +36,10 @@ public class UserController {
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String join(@ModelAttribute("userVo") UserVo userVo) {
-		if(userService.checkUser(userVo) != 0)
+		if(userService.getUser(userVo) != 0)
 			return "redirect:/user/join";
 		
-		String defaultLogo = fileUploadService.defaultUrl();
-		userService.addUser(userVo, defaultLogo);
+		userService.addUser(userVo);
 		
 		return "redirect:/user/joinsuccess";
 	}

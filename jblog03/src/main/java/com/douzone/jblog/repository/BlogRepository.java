@@ -9,10 +9,16 @@ import com.douzone.jblog.vo.BlogVo;
 @Repository
 public class BlogRepository {	
 	@Autowired
+	private BlogVo vo;
+	
+	@Autowired
 	private SqlSession sqlSession;
 		
-	public int insert(BlogVo blogVo) {
-		return sqlSession.insert("blog.insert", blogVo);
+	public int insert(String userVoId) {
+		vo.setId(userVoId);
+		vo.setTitle(userVoId + "의 블로그 입니다.");
+		
+		return sqlSession.insert("blog.insert", vo);
 	}
 
 }
