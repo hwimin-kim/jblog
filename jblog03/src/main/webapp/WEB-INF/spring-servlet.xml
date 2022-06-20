@@ -14,7 +14,22 @@
 			http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://www.springframework.org/schema/context
 			http://www.springframework.org/schema/context/spring-context.xsd">
-		<mvc:annotation-driven/>
+			
+		<!-- validator, conversionService, messageConverter를 자동으로 등록 -->		
+		<mvc:annotation-driven>
+				<!-- Argument Resolver -->
+				<mvc:argument-resolvers>
+						<bean class="com.douzone.jblog.security.AuthUserHandlerMethodArgumentResolver" />
+				</mvc:argument-resolvers>
+		</mvc:annotation-driven>
+
+		<!-- Interceptors -->
+		<mvc:interceptors>
+				<mvc:interceptor>
+						<mvc:mapping path="/user/auth"/>
+						<bean class="com.douzone.jblog.security.LoginInterceptor" />
+				</mvc:interceptor>
+		</mvc:interceptors>
 		
 		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 		<mvc:default-servlet-handler/>

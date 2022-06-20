@@ -16,7 +16,11 @@ public class UserRepository {
 	}
 
 	public int findCountById(String userVoId) {
-		return sqlSession.selectOne("user.select", userVoId);
+		return sqlSession.selectOne("user.count", userVoId);
+	}
+
+	public UserVo findById(UserVo userVo) {
+		return sqlSession.selectOne("user.select", userVo);
 	}
 
 }

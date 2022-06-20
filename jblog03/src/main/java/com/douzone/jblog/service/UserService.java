@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.douzone.jblog.repository.BlogRepository;
 import com.douzone.jblog.repository.CategoryRepository;
 import com.douzone.jblog.repository.UserRepository;
-import com.douzone.jblog.vo.BlogVo;
-import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.UserVo;
 
 @Service
@@ -29,8 +27,13 @@ public class UserService {
 		return false;
 	}
 
-	public int getUser(UserVo userVo) {
+	public int checkUser(UserVo userVo) {
 		return userRepository.findCountById(userVo.getId());
 	}
+	
+	public UserVo getUser(UserVo userVo) {
+		return userRepository.findById(userVo);
+	}
+
 
 }

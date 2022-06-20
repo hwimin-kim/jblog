@@ -9,12 +9,19 @@
 				values(#{id }, #{name }, #{password })
 				]]>
 		</insert>
-		<select id="select" parameterType="String" resultType="integer">
+		<select id="count" parameterType="String" resultType="integer">
 				<![CDATA[
 				select count(id)
 					from user
 				where id = #{id }
 				]]>
 		</select>
-		
+				<select id="select" parameterType="uservo" resultType="uservo">
+				<![CDATA[
+				select id, name
+					from user
+				where id = #{id }
+					and password = #{password }
+				]]>
+		</select>
 </mapper>
