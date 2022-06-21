@@ -9,12 +9,26 @@
 				values(null, #{name }, #{description }, #{blogId })
 				]]>
 		</insert>
-		
+		<delete id="delete" parameterType="long">
+				<![CDATA[
+				delete
+					from category
+				where no = #{no }
+				]]>
+		</delete>
 		<select id="select" parameterType="string" resultType="categoryvo">
 				<![CDATA[
-				select name, description
+				select no, name, description
 					from category
-				where blog_id = #{blogId}
+				where blog_id = #{blogId }
+				]]>
+		</select>
+		<select id="selectNo" parameterType="map" resultType="categoryvo">
+				<![CDATA[
+				select no
+					from category
+				where name = #{categoryName }
+					and blog_id = #{blogId }
 				]]>
 		</select>
 </mapper>

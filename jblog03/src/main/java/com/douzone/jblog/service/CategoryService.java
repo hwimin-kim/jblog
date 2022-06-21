@@ -17,4 +17,16 @@ public class CategoryService {
 		return categoryRepository.findAllbyId(blogId);
 	}
 
+	public int addCategory(CategoryVo categoryVo) {
+		return categoryRepository.insert(categoryVo);
+	}
+
+	public int removeCategory(Long no) {
+		return categoryRepository.delete(no);
+	}
+
+	public CategoryVo getCategoryNo(String categoryName, String blogId) {
+		return categoryRepository.findNobyName(categoryName, blogId);
+	}
+
 }

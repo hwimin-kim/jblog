@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
-	private static String RESTORE_PATH = "/mysite-uploads";
+	private static String RESTORE_PATH = "/jblog-uploads";
 	private static String URL_BASE = "/assets/gallery";
 
 	public String restore(MultipartFile multipartFile) {
@@ -30,10 +30,9 @@ public class FileUploadService {
 			String restoreFilename = generateSaveFilename(extName);	
 			Long fileSize = multipartFile.getSize();
 			
-			System.out.println("##########" + originFileName);
-			System.out.println("##########" + restoreFilename);
-			System.out.println("##########" + fileSize);
-		
+//			System.out.println("##########" + originFileName);
+//			System.out.println("##########" + restoreFilename);
+//			System.out.println("##########" + fileSize);
 		
 			byte[] data = multipartFile.getBytes();
 			OutputStream os = new FileOutputStream(RESTORE_PATH + "/" + restoreFilename);

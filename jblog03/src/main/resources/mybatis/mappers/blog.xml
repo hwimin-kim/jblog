@@ -9,9 +9,27 @@
 				values(#{id }, #{title}, '/assets/gallery/default.jpg')
 				]]>
 		</insert>
+		<update id="update" parameterType="blogvo">
+				<choose>
+						<when test='_parameter.logo == null'>
+						<![CDATA[
+						update
+							blog set title = #{title}
+						where id = #{id}
+						]]>
+						</when>
+						<otherwise>
+						<![CDATA[
+						update
+							blog set title = #{title}, logo = #{logo}
+						where id = #{id}
+						]]>
+						</otherwise>
+				</choose>
+		</update>		
 		<select id="select" parameterType="String" resultType="blogvo">
 				<![CDATA[
-				select title, logo
+				select id, title, logo
 					from blog
 				where id = #{id}
 				]]>

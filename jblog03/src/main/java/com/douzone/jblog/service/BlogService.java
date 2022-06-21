@@ -15,4 +15,8 @@ public class BlogService {
 		return blogRepository.findAllById(blogId);
 	}
 
+	public int updateBlog(BlogVo blogVo) {
+		return blogRepository.update(blogVo);
+	}
+
 }
