@@ -45,7 +45,7 @@
 								<tr>
 										<td>${count-status.index }</td>
 										<td>${vo.name }</td>
-										<td>10포스터수</td>
+										<td>${vo.categoryCount }</td>
 										<td>${vo.description }</td>
 										<td>
 												<a href="${pageContext.servletContext.contextPath }/${blogVo.id }/admin/category/delete/${vo.no }" class="del">
