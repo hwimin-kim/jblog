@@ -42,13 +42,11 @@ public class BlogController {
 	@Autowired
 	private FileUploadService fileUploadService;
 
-	@Auth
 	@RequestMapping({"", "/{pathNo1}", "/{pathNo1}/{pathNo2}"})
 	public String index(
 		@PathVariable("id") String id,
 		@PathVariable("pathNo1") Optional<Long> pathNo1,
 		@PathVariable("pathNo2") Optional<Long> pathNo2,
-		@AuthUser UserVo authUser,
 		Model model) {
 		
 		Long categoryNo = 0L;
@@ -60,24 +58,25 @@ public class BlogController {
 		} else if(pathNo1.isPresent()) {
 			categoryNo = pathNo1.get();
 		}
-		
+
 		BlogVo blogVo = blogService.getBlog(id);
 		List<CategoryVo> categorylist = categoryService.getCategoryList(id);
+		List<PostVo> postList = postService.getPostList(categorylist.get(categoryNo.intValue()));
+		for(PostVo vo : postList)
+			System.out.println(vo);
 		
-		model.addAttribute("authUser", authUser);
 		model.addAttribute("blogVo", blogVo);
 		model.addAttribute("categorylist", categorylist);
 		model.addAttribute("categoryNo", categoryNo);
-		// return "BlogController.index(" + id + ", " + categoryNo + ", " + postNo + ")";
+		model.addAttribute("postList", postList);
+		model.addAttribute("postNo", postNo);
 		return "blog/main";
 	}
 	
 	@Auth
 	@RequestMapping(value="/admin/basic", method=RequestMethod.GET)
 	public String adminBasic(@PathVariable("id") String id, @AuthUser UserVo authUser, Model model) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		BlogVo blogVo = blogService.getBlog(id);
 		
 		model.addAttribute("blogVo", blogVo);
@@ -92,9 +91,7 @@ public class BlogController {
 			@AuthUser UserVo authUser,
 			@RequestParam(value="title", required=true, defaultValue="") String title,
 			@RequestParam(value="file", required=true, defaultValue="") MultipartFile multipartFile) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		updateBlogVo.setId(authUser.getId());
 		updateBlogVo.setTitle(title);
 		updateBlogVo.setLogo(fileUploadService.restore(multipartFile));
@@ -105,9 +102,7 @@ public class BlogController {
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.GET)
 	public String adminCategory(@PathVariable("id") String id, @AuthUser UserVo authUser, Model model) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+		System.out.println(id);
 		List<CategoryVo> categorylist = categoryService.getCategoryList(id);
 		for(CategoryVo vo : categorylist)
 			System.out.println(vo);
@@ -124,15 +119,14 @@ public class BlogController {
 			@PathVariable("id") String id,
 			@AuthUser UserVo authUser,
 			@ModelAttribute CategoryVo categoryVo) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		categoryVo.setBlogId(id);
 		categoryService.addCategory(categoryVo);
 		
 		return "redirect:/" + authUser.getId() + "/admin/category";
 	}
 	
+	// post도 삭제해야하는지 고려??
 	@Auth
 	@RequestMapping(value="/admin/category/delete/{no}", method=RequestMethod.GET)
 	public String adminCategoryDelete(
@@ -140,9 +134,7 @@ public class BlogController {
 			@PathVariable("no") Long no,
 			@AuthUser UserVo authUser,
 			Model model) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		categoryService.removeCategory(no);
 		
 		return "redirect:/" + authUser.getId() + "/admin/category";
@@ -154,9 +146,7 @@ public class BlogController {
 			@PathVariable("id") String id,
 			@AuthUser UserVo authUser,
 			Model model) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		BlogVo blogVo = blogService.getBlog(id);
 		List<CategoryVo> categorylist = categoryService.getCategoryList(id);
 		
@@ -173,9 +163,7 @@ public class BlogController {
 			@AuthUser UserVo authUser,
 			@ModelAttribute PostVo postVo,
 			@RequestParam(value="category", required=true, defaultValue="") String category) {
-		if(!authUser.getId().equals(id)) {
-			return "redirect:/";
-		}
+
 		CategoryVo categoryVo = categoryService.getCategoryNo(category, id);
 		postVo.setCategoryNo(categoryVo.getNo());
 		postService.addPost(postVo);

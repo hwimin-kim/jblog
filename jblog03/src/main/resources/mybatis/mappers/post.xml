@@ -9,4 +9,11 @@
 				values(null, #{title }, #{contents }, #{categoryNo })
 				]]>
 		</insert>
+		<select id="select" parameterType="categoryvo" resultType="postvo">
+				<![CDATA[
+				select no, title, contents, category_no as categoryNo
+					from post
+				where category_no = #{no }
+				]]>
+		</select>
 </mapper>

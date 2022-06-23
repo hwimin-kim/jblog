@@ -8,7 +8,7 @@ public class CategoryVo {
 	private String name;
 	private String description;
 	private String blogId;
-	private int categoryCount;
+	private int postCount;
 	
 	public int getNo() {
 		return no;
@@ -42,17 +42,18 @@ public class CategoryVo {
 		this.blogId = blogId;
 	}
 	
-	public int getCategoryCount() {
-		return categoryCount;
+	public int getPostCount() {
+		return postCount;
 	}
 
-	public void setCategoryCount(int categoryCount) {
-		this.categoryCount = categoryCount;
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
 	}
 
 	@Override
 	public String toString() {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", blogId=" + blogId
-				+ ", categoryCount=" + categoryCount + "]";
+				+ ", postCount=" + postCount + "]";
 	}
+
 }

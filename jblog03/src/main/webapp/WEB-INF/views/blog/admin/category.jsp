@@ -15,9 +15,11 @@
 			<h1>${blogVo.title }</h1>
 			<ul>
 			<c:choose>
-					<c:when test="${not empty authUser && not empty authUser.id}">			
-							<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
-							<li><a href="${pageContext.request.contextPath}/${blogVo.id }/admin/basic">블로그 관리</a></li>
+					<c:when test="${not empty authUser && not empty authUser.id}">
+									<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
+							<c:if test="${authUser.id == blogVo.id}">
+									<li><a href="${pageContext.request.contextPath}/${blogVo.id }/admin/basic">블로그 관리</a></li>
+							</c:if>
 					</c:when>
 					<c:otherwise>
 							<li><a href="${pageContext.request.contextPath}/user/login">로그인</a></li>
@@ -45,12 +47,14 @@
 								<tr>
 										<td>${count-status.index }</td>
 										<td>${vo.name }</td>
-										<td>${vo.categoryCount }</td>
+										<td>${vo.postCount }</td>
 										<td>${vo.description }</td>
 										<td>
+										<c:if test="${vo.postCount == 0 or count != 1}">
 												<a href="${pageContext.servletContext.contextPath }/${blogVo.id }/admin/category/delete/${vo.no }" class="del">
-													<img src="${pageContext.request.contextPath}/assets/images/delete.jpg">
+														<img src="${pageContext.request.contextPath}/assets/images/delete.jpg">
 												</a>
+										</c:if>
 										</td>
 								</tr>
 								</c:forEach>    

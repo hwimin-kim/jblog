@@ -16,29 +16,29 @@
 			<ul>
 			<c:choose>
 					<c:when test="${not empty authUser && not empty authUser.id}">
-							<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
-							<li><a href="${pageContext.request.contextPath}/${blogVo.id }/admin/basic">블로그 관리</a></li>
+									<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
+							<c:if test="${authUser.id == blogVo.id}">
+									<li><a href="${pageContext.request.contextPath}/${blogVo.id }/admin/basic">블로그 관리</a></li>
+							</c:if>
 					</c:when>
 					<c:otherwise>
 							<li><a href="${pageContext.request.contextPath}/user/login">로그인</a></li>
-					</c:otherwise>				
-			</c:choose>
+					</c:otherwise>
+			</c:choose>		
 			</ul>
 		</div>
 		<div id="wrapper">
 			<div id="content">
 				<div class="blog-content">
-					<h4>Spring Camp 2016 참여기</h4>
+					<h4>${postList[postNo].title }</h4>
 					<p>
-							${fn:replace(categorylist[categoryNo].description, newLine, "<br/>") }
+							${fn:replace(postList[postNo].contents, newLine, "<br/>") }
 					<p>
 				</div>
 				<ul class="blog-list">
-					<li><a href="">Spring Camp 2016 참여기</a> <span>2015/05/02</span>	</li>
-					<li><a href="">Spring Boot 사용법 정리</a> <span>2015/05/02</span>	</li>
-					<li><a href="">Spring Security 설정법</a> <span>2015/05/02</span>	</li>
-					<li><a href="">JPA + Hinernate</a> <span>2015/05/02</span>	</li>
-					<li><a href="">AOP 활용하기 - DAO 실행시간 측정하기</a> <span>2015/05/02</span>	</li>
+				<c:forEach items="${postList }" var='vo' varStatus='status'>
+					<li><a href="${pageContext.request.contextPath}/${blogVo.id }/${categoryNo }/${status.index }">${vo.title }</a></li>
+				</c:forEach>
 				</ul>
 			</div>
 		</div>

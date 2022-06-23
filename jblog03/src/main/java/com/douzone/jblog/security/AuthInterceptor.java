@@ -44,16 +44,17 @@ public class AuthInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		
-//		// 8. 권한 체크를 위해서 @Auth의 role 가져오기
-//		String role = auth.role();
-//		String authUserRole = authUser.getRole();
-//		
-//		// 과제
-//		if(role.equals("ADMIN") && authUserRole.equals("USER")) {
-//			response.sendRedirect(request.getContextPath());
-//			return false;
-//		}
-		// 9. @Auth 가 적용되어 있고 인증도 되어 있음
+		String authUserId = authUser.getId();	
+		String urlPath = request.getRequestURI();
+		String[] urlArr = urlPath.split("/");
+		
+		// 8. @Auth 가 적용, 로그인한 유저가 다른 유저의 [블로그 관리]에 접근하는 것을 제한
+		if(urlArr.length > 3) {	
+			if(!authUserId.equals(urlArr[2]) && urlArr[3].equals("admin")) {		
+				response.sendRedirect(request.getContextPath());
+				return false;
+			}
+		}
 		return true;
 	}
 	
