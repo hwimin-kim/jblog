@@ -19,16 +19,16 @@ public class BlogInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		ServletContext  application = request.getServletContext();
-		if(application.getAttribute("blog") == null) {
-			String urlPath = request.getRequestURI();
-			String[] urlArr = urlPath.split("/");
-			
-			BlogVo vo = blogService.getBlog(null);
-			application.setAttribute("blog", vo);
-			response.sendRedirect(request.getContextPath());
-			return false;
-		} 
+//		ServletContext  application = request.getServletContext();
+//		if(application.getAttribute("blog") == null) {
+//			String urlPath = request.getRequestURI();
+//			String[] urlArr = urlPath.split("/");
+//			
+//			BlogVo vo = blogService.getBlog(null);
+//			application.setAttribute("blog", vo);
+//			response.sendRedirect(request.getContextPath());
+//			return false;
+//		} 
 		return true;
 	}
 	
