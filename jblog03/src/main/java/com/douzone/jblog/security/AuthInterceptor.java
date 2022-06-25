@@ -1,16 +1,18 @@
 package com.douzone.jblog.security;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.douzone.jblog.vo.UserVo;
 
 public class AuthInterceptor implements HandlerInterceptor {
-
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -33,7 +35,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		// 5. Type과 Method 모두에 @Auth가 안 붙어 있는 경우
 		if(auth == null)
 			return true;
-
+				
 		// 6. Handler Method에 @Auth가 붙어 있기 때문에 인증(Authentication) 여부 확인
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
@@ -44,16 +46,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		
-		String authUserId = authUser.getId();	
-		String urlPath = request.getRequestURI();
-		String[] urlArr = urlPath.split("/");
+		Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+		String blogId = (String)pathVariables.get("id");
 		
 		// 8. @Auth 가 적용, 로그인한 유저가 다른 유저의 [블로그 관리]에 접근하는 것을 제한
-		if(urlArr.length > 3) {	
-			if(!authUserId.equals(urlArr[2]) && urlArr[3].equals("admin")) {		
-				response.sendRedirect(request.getContextPath());
-				return false;
-			}
+		if(!authUser.getId().equals(blogId)) {		
+			response.sendRedirect(request.getContextPath());
+			return false;
 		}
 		return true;
 	}

@@ -1,12 +1,14 @@
 package com.douzone.jblog.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,12 +56,11 @@ public class BlogController {
 		} else if(pathNo1.isPresent()) {
 			categoryNo = pathNo1.get();
 		}
-	
-		Map<String, Object> map = blogService.getBlog(id);
-		List<PostVo> postList = postService.getPostList(((List<CategoryVo>) map.get("categorylist")).get(categoryNo.intValue()));
-		map.put("postList", postList);
-		map.put("categoryNo", categoryNo);
-		map.put("postNo", postNo);
+		// 존재하지 않는 id의 블로그로 접근할 경우
+		if(blogService.checkId(id) == 0)
+			return "redirect:/";
+			
+		Map<String, Object> map = blogService.getBlog(id, categoryNo, postNo);
 		
 		model.addAllAttributes(map);
 		return "blog/main";
@@ -86,7 +87,7 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.GET)
-	public String adminCategory(@PathVariable("id") String id, Model model) {
+	public String adminCategory(@PathVariable("id") String id, @ModelAttribute("categoryVo") CategoryVo categoryVo, Model model) {
 		Map<String, Object> map = blogService.getBlog(id);
 		
 		model.addAllAttributes(map);
@@ -95,14 +96,14 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.POST)
-	public String adminCategory(@PathVariable("id") String id, @ModelAttribute CategoryVo categoryVo) {
-		categoryVo.setBlogId(id);
-		categoryService.addCategory(categoryVo);
-		
+	public String adminCategory(@PathVariable("id") String id, @ModelAttribute("categoryVo")@Valid CategoryVo categoryVo, BindingResult result) {
+		if(!result.hasErrors()) {
+			categoryVo.setBlogId(id);
+			categoryService.addCategory(categoryVo);
+		}
 		return "redirect:/" + id + "/admin/category";
 	}
 	
-	// post도 삭제해야하는지 고려??
 	@Auth
 	@RequestMapping(value="/admin/category/delete/{no}", method=RequestMethod.GET)
 	public String adminCategoryDelete(@PathVariable("id") String id, @PathVariable("no") Long no) {

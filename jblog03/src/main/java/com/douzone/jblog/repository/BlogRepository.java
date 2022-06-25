@@ -29,4 +29,8 @@ public class BlogRepository {
 		return sqlSession.update("blog.update", blogVo);
 	}
 
+	public int findById(String blogId) {
+		return sqlSession.selectOne("blog.selectCount", blogId);
+	}
+
 }

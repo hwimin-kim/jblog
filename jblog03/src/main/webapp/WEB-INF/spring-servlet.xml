@@ -40,6 +40,16 @@
 						<mvc:exclude-mapping path="/user/logout"/>
 						<bean class="com.douzone.jblog.security.AuthInterceptor" />
 				</mvc:interceptor>
+				<mvc:interceptor>
+						<mvc:mapping path="/user/login"/>
+						<mvc:mapping path="/user/join"/>
+						<bean class="com.douzone.jblog.interceptor.LoginCheckInterceptor" />
+				</mvc:interceptor>
+				<mvc:interceptor>
+						<mvc:mapping path="/user/join"/>
+						<mvc:mapping path="/*/admin/category"/>
+						<bean class="com.douzone.jblog.interceptor.ValidInterceptor" />
+				</mvc:interceptor>
 		</mvc:interceptors>
 		
 		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
@@ -47,6 +57,15 @@
 
 		<!-- MVC Resource Mapping -->
 		<mvc:resources location="file:/jblog-uploads/" mapping="/assets/gallery/**" />
+
+		<!-- MessageSource -->
+		<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		   <property name="basenames">
+		      <list>
+							<value>messages/messages_ko</value>
+		      </list>
+		   </property>
+		</bean>
 
 		<!-- Multipart Resolver -->
 		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  

@@ -34,4 +34,11 @@
 				where id = #{id}
 				]]>
 		</select>
+		<select id="selectCount" parameterType="String" resultType="integer">
+				<![CDATA[
+				select count(id)
+					from blog
+				where id = #{id}
+				]]>
+		</select>
 </mapper>

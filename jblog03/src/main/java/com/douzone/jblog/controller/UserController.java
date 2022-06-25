@@ -1,8 +1,11 @@
 package com.douzone.jblog.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,12 +21,7 @@ public class UserController {
 	private UserService userService;
 		
 	@RequestMapping("/login")
-	public String login(@AuthUser UserVo authUser, Model model) {
-		// 이미 로그인한 경우
-		if(authUser != null)
-			return "redirect:/";
-					
-		model.addAttribute("authUser", authUser);
+	public String login() {				
 		return "user/login";
 	}
 	
@@ -36,30 +34,27 @@ public class UserController {
 	}	
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String join(@AuthUser UserVo authUser) {
-		// 이미 로그인한 경우
-		if(authUser != null)
-			return "redirect:/";
-		
+	public String join(@ModelAttribute UserVo userVo) {	
 		return "user/join";
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(@ModelAttribute("userVo") UserVo userVo, Model model) {
+	public String join(@ModelAttribute("userVo") @Valid UserVo userVo, BindingResult result, Model model) {	
 		// 이미 등록된 회원(id)인 경우
 		if(userService.checkUser(userVo) != 0) {
-			model.addAttribute("userVo", userVo);
+			model.addAttribute("checkUser", "notEmpty");
 			return "user/join";
 		}
 		
-		userService.addUser(userVo);
-		
+		// Satisfy Valid
+		if(!result.hasErrors()) 
+			userService.addUser(userVo);
+
 		return "redirect:/user/joinsuccess";
 	}
 		
 	@RequestMapping("/joinsuccess")
-	public String joinsuccess(@AuthUser UserVo authUser, Model model) {
-		model.addAttribute("authUser", authUser);
+	public String joinsuccess() {
 		return "user/joinsuccess";
 	}
 }

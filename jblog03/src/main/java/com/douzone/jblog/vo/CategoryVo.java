@@ -1,11 +1,20 @@
 package com.douzone.jblog.vo;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryVo {
 	private int no;
+	
+	@NotEmpty
+	@Length(min=2, max=4)
 	private String name;
+	
+	@NotEmpty
+	@Length(min=5, max=20)
 	private String description;
 	private String blogId;
 	private int postCount;
