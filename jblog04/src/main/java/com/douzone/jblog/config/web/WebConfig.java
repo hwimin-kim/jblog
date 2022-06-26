@@ -57,8 +57,11 @@ public class WebConfig implements WebMvcConfigurer {
 			.addPathPatterns("/{id:(?!assets).*}/*")
 			.addPathPatterns("/{id:(?!assets).*}/*/*")
 			.excludePathPatterns("/assets/**")
+			.excludePathPatterns("/user/login")
+			.excludePathPatterns("/user/join")
 			.excludePathPatterns("/user/auth")
 			.excludePathPatterns("/user/logout")
+			.excludePathPatterns("/user/joinsuccess")
 			.excludePathPatterns("/{id:(?!assets).*}/admin/*");
 	}
 }
