@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.douzone.jblog.security.AuthUser;
 import com.douzone.jblog.service.UserService;
 import com.douzone.jblog.vo.UserVo;
 

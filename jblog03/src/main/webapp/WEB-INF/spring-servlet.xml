@@ -50,6 +50,16 @@
 						<mvc:mapping path="/*/admin/category"/>
 						<bean class="com.douzone.jblog.interceptor.ValidInterceptor" />
 				</mvc:interceptor>
+				<mvc:interceptor>
+						<mvc:mapping path="/{id:(?!assets).*}"/>
+						<mvc:mapping path="/{id:(?!assets).*}/*"/>
+						<mvc:mapping path="/{id:(?!assets).*}/*/*"/>
+						<mvc:exclude-mapping path="/assets/**"/>
+						<mvc:exclude-mapping path="/user/auth"/>
+						<mvc:exclude-mapping path="/user/logout"/>
+						<mvc:exclude-mapping path="/{id:(?!assets).*}/admin/*"/>
+						<bean class="com.douzone.jblog.interceptor.BlogMainInterceptor" />
+				</mvc:interceptor>
 		</mvc:interceptors>
 		
 		<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->

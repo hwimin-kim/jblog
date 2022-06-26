@@ -16,4 +16,11 @@
 				where category_no = #{no }
 				]]>
 		</select>
+		<select id="selectNoByCategoryNo" parameterType="long" resultType="integer">
+				<![CDATA[
+				select count(no)
+					from post
+				where category_no = #{categoryNo }
+				]]>
+		</select>
 </mapper>

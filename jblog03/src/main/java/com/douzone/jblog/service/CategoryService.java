@@ -26,7 +26,14 @@ public class CategoryService {
 	}
 
 	public CategoryVo getCategoryNo(String categoryName, String blogId) {
-		return categoryRepository.findNobyName(categoryName, blogId);
+		return categoryRepository.findNobyNameANDId(categoryName, blogId);
+	}
+
+	public boolean getCategoryNo(Long categoryNo, String blogId) {
+		if(categoryNo >= categoryRepository.findNobyId(blogId)) {
+			return false;
+		}
+		return true;
 	}
 
 }

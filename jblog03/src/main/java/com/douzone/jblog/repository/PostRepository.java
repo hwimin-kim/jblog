@@ -22,4 +22,8 @@ public class PostRepository {
 		return sqlSession.selectList("post.select", categoryVo);
 	}
 
+	public int findNoByCategoryNo(Long categoryNo) {
+		return sqlSession.selectOne("post.selectNoByCategoryNo", categoryNo);
+	}
+
 }

@@ -38,11 +38,15 @@ public class CategoryRepository {
 		return sqlSession.delete("category.delete", no);
 	}
 
-	public CategoryVo findNobyName(String categoryName, String blogId) {
+	public CategoryVo findNobyNameANDId(String categoryName, String blogId) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("categoryName", categoryName);
 		map.put("blogId", blogId);
 		
-		return sqlSession.selectOne("category.selectNo", map);
+		return sqlSession.selectOne("category.selectNoByNameANDId", map);
+	}
+
+	public int findNobyId(String blogId) {	
+		return sqlSession.selectOne("category.selectNoById", blogId);
 	}
 }

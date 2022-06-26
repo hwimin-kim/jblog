@@ -25,12 +25,19 @@
 				where a.blog_id = #{blogId };
 				]]>
 		</select>
-		<select id="selectNo" parameterType="map" resultType="categoryvo">
+		<select id="selectNoByNameANDId" parameterType="map" resultType="categoryvo">
 				<![CDATA[
 				select no
 					from category
 				where name = #{categoryName }
 					and blog_id = #{blogId }
+				]]>
+		</select>
+				<select id="selectNoById" parameterType="string" resultType="integer">
+				<![CDATA[
+				select count(no)
+					from category
+				where blog_id = #{blogId }
 				]]>
 		</select>
 </mapper>

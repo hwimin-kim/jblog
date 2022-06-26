@@ -22,4 +22,17 @@ public class PostService {
 		return postRepository.findAll(categoryVo);
 	}
 
+	public boolean getPostNo(Long postNo, Long categoryNo) {
+		
+		// 포스트가 0개인 경우
+		if(postRepository.findNoByCategoryNo(categoryNo) == 0)
+			return true;
+		
+		// 찾으려는 포스트가 범위를 벗어난 경우
+		if(postNo >= postRepository.findNoByCategoryNo(categoryNo))
+			return false;
+		
+		return true;
+	}
+
 }

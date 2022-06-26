@@ -1,6 +1,5 @@
 package com.douzone.jblog.controller;
 
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -41,37 +40,18 @@ public class BlogController {
 	private FileUploadService fileUploadService;
 
 	@RequestMapping({"", "/{pathNo1}", "/{pathNo1}/{pathNo2}"})
-	public String index(
-		@PathVariable("id") String id,
-		@PathVariable("pathNo1") Optional<Long> pathNo1,
-		@PathVariable("pathNo2") Optional<Long> pathNo2,
-		Model model) {
-		
-		Long categoryNo = 0L;
-		Long postNo = 0L;
-		
-		if(pathNo2.isPresent()) {
-			categoryNo = pathNo1.get();
-			postNo = pathNo2.get();
-		} else if(pathNo1.isPresent()) {
-			categoryNo = pathNo1.get();
-		}
-		// 존재하지 않는 id의 블로그로 접근할 경우
-		if(blogService.checkId(id) == 0)
-			return "redirect:/";
-			
-		Map<String, Object> map = blogService.getBlog(id, categoryNo, postNo);
-		
-		model.addAllAttributes(map);
+	public String index(@PathVariable("id") String id, @PathVariable(value="pathNo1", required=false) String pathNo1, @PathVariable(value="pathNo2", required=false) String pathNo2, Model model) {	
+		Long categoryNo = Long.parseLong(Optional.ofNullable(pathNo1).orElse("0"));
+		Long postNo = Long.parseLong(Optional.ofNullable(pathNo2).orElse("0"));
+					
+		model.addAllAttributes(blogService.getBlog(id, categoryNo, postNo));
 		return "blog/main";
 	}
 	
 	@Auth
 	@RequestMapping(value="/admin/basic", method=RequestMethod.GET)
-	public String adminBasic(@PathVariable("id") String id, Model model) {
-		Map<String, Object> map = blogService.getBlog(id);
-		
-		model.addAllAttributes(map);
+	public String adminBasic(@PathVariable("id") String id, Model model) {	
+		model.addAllAttributes(blogService.getBlog(id));
 		return "blog/admin/basic";
 	}
 	
@@ -87,13 +67,12 @@ public class BlogController {
 	
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.GET)
-	public String adminCategory(@PathVariable("id") String id, @ModelAttribute("categoryVo") CategoryVo categoryVo, Model model) {
-		Map<String, Object> map = blogService.getBlog(id);
-		
-		model.addAllAttributes(map);
+	public String adminCategory(@PathVariable("id") String id, @ModelAttribute("categoryVo") CategoryVo categoryVo, Model model) {	
+		model.addAllAttributes(blogService.getBlog(id));
 		return "blog/admin/category";
 	}
 	
+	// 카테고리 중복 체크
 	@Auth
 	@RequestMapping(value="/admin/category", method=RequestMethod.POST)
 	public String adminCategory(@PathVariable("id") String id, @ModelAttribute("categoryVo")@Valid CategoryVo categoryVo, BindingResult result) {
@@ -101,31 +80,28 @@ public class BlogController {
 			categoryVo.setBlogId(id);
 			categoryService.addCategory(categoryVo);
 		}
+		
 		return "redirect:/" + id + "/admin/category";
 	}
 	
 	@Auth
 	@RequestMapping(value="/admin/category/delete/{no}", method=RequestMethod.GET)
 	public String adminCategoryDelete(@PathVariable("id") String id, @PathVariable("no") Long no) {
-		categoryService.removeCategory(no);
-		
+		categoryService.removeCategory(no);	
 		return "redirect:/" + id + "/admin/category";
 	}
 	
 	@Auth
 	@RequestMapping(value="/admin/write", method=RequestMethod.GET)
-	public String adminWrite(@PathVariable("id") String id, Model model) {
-		Map<String, Object> map = blogService.getBlog(id);
-		
-		model.addAllAttributes(map);
+	public String adminWrite(@PathVariable("id") String id, Model model) {		
+		model.addAllAttributes(blogService.getBlog(id));
 		return "blog/admin/write";
 	}
 	
 	@Auth
 	@RequestMapping(value="/admin/write", method=RequestMethod.POST)
 	public String adminWrite(@PathVariable("id") String id, @ModelAttribute PostVo postVo, @RequestParam(value="category", required=true, defaultValue="") String category) {
-		CategoryVo categoryVo = categoryService.getCategoryNo(category, id);
-		postVo.setCategoryNo(categoryVo.getNo());
+		postVo.setCategoryNo(categoryService.getCategoryNo(category, id).getNo());
 		postService.addPost(postVo);
 		
 		return "redirect:/" + id;
